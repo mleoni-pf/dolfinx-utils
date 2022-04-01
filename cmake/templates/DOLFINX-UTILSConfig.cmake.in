@@ -1,0 +1,12 @@
+# FIXME: Check that naming conforms to CMake standards
+
+@PACKAGE_INIT@
+
+# Compilers
+set_and_check(DOLFINX-UTILS_CXX_COMPILER "@CMAKE_CXX_COMPILER@")
+
+if (NOT TARGET dolfinx-utils)
+  include("${CMAKE_CURRENT_LIST_DIR}/DOLFINX-UTILSTargets.cmake")
+endif()
+
+check_required_components(DOLFINX-UTILS)
