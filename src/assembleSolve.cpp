@@ -42,10 +42,9 @@ KSPConvergedReason
 
     LOG(INFO) << "Assembling vector";
     b->set(0);
-    b->scatter_fwd();
     fem::assemble_vector(b->mutable_array(), *L);
     fem::apply_lifting(b->mutable_array(), {a}, {{bc}}, {}, 1);
-    b->scatter_rev(common::IndexMap::Mode::add);
+    b->scatter_rev(std::plus<PetscScalar>());
     fem::set_bc(b->mutable_array(), {bc});
     LOG(INFO) << "Vector assembly done";
 
