@@ -4,9 +4,14 @@
 #include <dolfinx/la/petsc.h>
 #include <dolfinx/mesh/MeshTags.h>
 
-using DirichletBCFunction_ret = xt::xarray<PetscScalar>;
+using DirichletBCFunction_ret =
+        std::pair<std::vector<PetscScalar>, std::vector<std::size_t>>;
 using DirichletBCFunction = const std::function<DirichletBCFunction_ret(
-        const xt::xtensor<double, 2> &)>;
+        std::experimental::mdspan<const double,
+                                  std::experimental::extents<
+                                          std::size_t,
+                                          3,
+                                          std::experimental::dynamic_extent>>)>;
 
 using DirichletBCList_key_type =
         std::pair<const dolfinx::mesh::MeshTags<int> &, int>;
