@@ -32,7 +32,7 @@ struct less<DirichletBCList_key_type>
 };
 }
 
-#include "TimeDependentFunction.h"
+class TimeDependentFunction;
 
 using DirichletBCList =
         std::vector<std::pair<DirichletBCList_key_type,
