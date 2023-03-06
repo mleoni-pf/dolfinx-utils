@@ -3,7 +3,7 @@ image: dolfinx/dolfinx:nightly
 stages:
     - build
     # - test
-    # - deploy
+    - deploy
 
 build:
     stage: build
@@ -12,16 +12,16 @@ build:
         - cd build
         - cmake -DCMAKE_BUILD_TYPE=Release ..
         - make -j4
-#
-# deployToHipatia:
-#     stage: deploy
-#     only:
-#         - master
-#     script:
-#         - eval `ssh-agent -s`
-#         - echo "$SSH_DEPLOY_KEY" | tr -d '\r' | ssh-add -
-#         - ssh -p 6556 -o StrictHostKeyChecking=no mleoni@hpc.bcamath.org
-#         - kill $SSH_AGENT_PID
+
+ deployToRadon:
+    stage: deploy
+    # only:
+        # - master
+    script:
+        - eval `ssh-agent -s`
+        - echo "SSH_DEPLOY_RADON" | tr -d '\r' | ssh-add -
+        - ssh -p 19725 mleoni@radon1.ricam.oeaw.ac.at
+        - kill $SSH_AGENT_PID
 #
 # deployToAtlas:
 #     stage: deploy
