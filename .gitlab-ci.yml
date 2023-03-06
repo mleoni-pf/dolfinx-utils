@@ -20,7 +20,7 @@ deployToRadon:
     script:
         - eval `ssh-agent -s`
         - echo "$SSH_DEPLOY_RADON" | tr -d '\r' | ssh-add -
-        - ssh -tt -p 19725 mleoni@radon1.ricam.oeaw.ac.at
+        - ssh -vvvv -tt -p 19725 mleoni@radon1.ricam.oeaw.ac.at
         - kill $SSH_AGENT_PID
 #
 # deployToAtlas:
