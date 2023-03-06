@@ -15,20 +15,10 @@ build:
 
 deployToRadon:
     stage: deploy
-    # only:
-        # - master
+    only:
+        - master
     script:
         - eval `ssh-agent -s`
         - echo "$SSH_DEPLOY_RADON" | tr -d '\r' | ssh-add -
         - ssh -tt -p 19725 -o StrictHostKeyChecking=no  mleoni@radon1.ricam.oeaw.ac.at
         - kill $SSH_AGENT_PID
-#
-# deployToAtlas:
-#     stage: deploy
-#     only:
-#         - master
-#     script:
-#         - eval `ssh-agent -s`
-#         - echo "$SSH_DEPLOY_KEY" | tr -d '\r' | ssh-add -
-#         - TERM=xterm ssh -o StrictHostKeyChecking=no -o ProxyCommand="ssh -o StrictHostKeyChecking=no -W %h:%p mleoni@ac-01.sw.ehu.es" mleoni@atlas-fdr.sw.ehu.es
-#         - kill $SSH_AGENT_PID
