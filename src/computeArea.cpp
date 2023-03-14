@@ -28,7 +28,10 @@ PetscReal computeArea(const dolfinx::mesh::MeshTags<int>& tags, const int index)
                     {},
                     {},
                     {{"a", a}},
-                    {{fem::IntegralType::exterior_facet, &integrationTags}},
+                    {{fem::IntegralType::exterior_facet,
+                      fem::compute_integration_domains(
+                              fem::IntegralType::exterior_facet,
+                              integrationTags)}},
                     integrationTags.mesh()));
 
     auto area_loc = fem::assemble_scalar(*M_area);
