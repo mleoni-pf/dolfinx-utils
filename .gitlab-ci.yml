@@ -8,6 +8,8 @@ stages:
 build:
     stage: build
     script:
+        - source /usr/local/bin/dolfinx-real-mode
+        - export DOLFINX_DIR=/usr/local/dolfinx-real/lib/cmake/dolfinx
         - mkdir build
         - cd build
         - cmake -DCMAKE_BUILD_TYPE=Release ..
