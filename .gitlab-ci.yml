@@ -1,5 +1,5 @@
 image:
-    name: dolfinx/dolfinx:nightly
+    name: dolfinx/dolfinx:nightly-amd64
     pull_policy: always
 
 stages:
