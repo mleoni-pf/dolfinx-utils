@@ -1,4 +1,6 @@
-image: dolfinx/dolfinx:nightly
+image:
+    name: dolfinx/dolfinx:nightly
+    pull_policy: always
 
 stages:
     - build
