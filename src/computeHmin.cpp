@@ -1,13 +1,14 @@
 #include "computeHmin.h"
 
 #include <dolfinx/common/IndexMap.h>
+#include <dolfinx/mesh/utils.h>
 
 using namespace dolfinx;
 
-PetscReal computeHmin(const std::shared_ptr<mesh::Mesh>& mesh)
+PetscReal computeHmin(const std::shared_ptr<mesh::Mesh<double>>& mesh)
 {
-    auto dim = mesh->topology().dim();
-    auto map = mesh->topology().index_map(dim);
+    auto dim = mesh->topology()->dim();
+    auto map = mesh->topology()->index_map(dim);
     const std::size_t num_cells = map->size_local() + map->num_ghosts();
     std::vector<std::int32_t> cells(num_cells);
     std::iota(cells.begin(), cells.end(), 0);

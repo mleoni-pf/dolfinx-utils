@@ -6,7 +6,9 @@
 
 using namespace dolfinx;
 
-PetscReal computeArea(const dolfinx::mesh::MeshTags<int>& tags, const int index)
+PetscReal computeArea(const std::shared_ptr<const mesh::Mesh<double>> mesh,
+                      const mesh::MeshTags<int>& tags,
+                      const int index)
 {
     std::vector<int> values(tags.values().size());
 
@@ -15,7 +17,7 @@ PetscReal computeArea(const dolfinx::mesh::MeshTags<int>& tags, const int index)
                    values.begin(),
                    [=](const auto& val) { return val == index ? 0 : 1; });
     auto integrationTags = mesh::MeshTags<int>(
-            tags.mesh(),
+            tags.topology(),
             2,
             std::vector<std::int32_t>(tags.indices().begin(),
                                       tags.indices().end()),
@@ -31,16 +33,14 @@ PetscReal computeArea(const dolfinx::mesh::MeshTags<int>& tags, const int index)
                     {{fem::IntegralType::exterior_facet,
                       fem::compute_integration_domains(
                               fem::IntegralType::exterior_facet,
-                              integrationTags)}},
-                    integrationTags.mesh()));
+                              *tags.topology(),
+                              integrationTags.indices(),
+                              integrationTags.dim(),
+                              integrationTags.values())}},
+                    mesh));
 
     auto area_loc = fem::assemble_scalar(*M_area);
     decltype(area_loc) area = 0;
-    MPI_Allreduce(&area_loc,
-                  &area,
-                  1,
-                  MPI_DOUBLE,
-                  MPI_SUM,
-                  integrationTags.mesh()->comm());
+    MPI_Allreduce(&area_loc, &area, 1, MPI_DOUBLE, MPI_SUM, mesh->comm());
     return area;
 }
