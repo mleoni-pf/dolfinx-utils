@@ -58,6 +58,8 @@ KSPConvergedReason
     auto nit = solver.solve(_u.vec(), _b.vec());
     LOG(INFO) << "Solver done in " << nit << " iterations";
 
+    u->x()->scatter_fwd();
+
     KSPConvergedReason r;
     KSPGetConvergedReason(solver.ksp(), &r);
     return r;
