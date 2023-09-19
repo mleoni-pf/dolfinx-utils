@@ -38,8 +38,6 @@ set(DOLFINX-UTILSSRC
 
 add_library(dolfinx-utils STATIC ${DOLFINX-UTILSSRC} ${ufl2cpp_files})
 
-target_compile_features(dolfinx-utils PRIVATE cxx_std_17)
-
 # Target libraries
 target_link_libraries(dolfinx-utils dolfinx)
 
