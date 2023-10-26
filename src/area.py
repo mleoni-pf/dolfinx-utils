@@ -1,6 +1,12 @@
-from ufl import (Constant, ds, tetrahedron)
+from basix.ufl import element
+from ufl import (Constant, ds, Mesh)
 
-a = Constant(tetrahedron)
+dim = 3
+
+coord_element = element("Lagrange", "tetrahedron", 1, shape=(dim,))
+mesh = Mesh(coord_element)
+
+a = Constant(mesh)
 
 area = a * ds(0)
 
