@@ -24,6 +24,19 @@ PetscReal computeArea(const std::shared_ptr<const mesh::Mesh<double>> mesh,
             values);
 
     auto a = std::make_shared<fem::Constant<PetscScalar>>(1);
+    auto exteriorIntegrationDomains =
+            fem::compute_integration_domains(fem::IntegralType::exterior_facet,
+                                             *tags.topology(),
+                                             integrationTags.indices(),
+                                             integrationTags.dim(),
+                                             integrationTags.values());
+    std::vector<std::pair<std::int32_t, std::span<const std::int32_t>>>
+            exteriorIntegrationDomainsSpans;
+    for (const auto& [i, v] : exteriorIntegrationDomains)
+    {
+        exteriorIntegrationDomainsSpans.push_back(
+                std::make_pair(i, std::span(v)));
+    }
     auto M_area = std::make_shared<fem::Form<PetscScalar>>(
             fem::create_form<PetscReal>(
                     *form_area_area,
@@ -31,12 +44,7 @@ PetscReal computeArea(const std::shared_ptr<const mesh::Mesh<double>> mesh,
                     {},
                     {{"a", a}},
                     {{fem::IntegralType::exterior_facet,
-                      fem::compute_integration_domains(
-                              fem::IntegralType::exterior_facet,
-                              *tags.topology(),
-                              integrationTags.indices(),
-                              integrationTags.dim(),
-                              integrationTags.values())}},
+                      exteriorIntegrationDomainsSpans}},
                     mesh));
 
     auto area_loc = fem::assemble_scalar(*M_area);
