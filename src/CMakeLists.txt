@@ -68,7 +68,7 @@ install(TARGETS dolfinx-utils
   )
 
 # Generate DOLFINX-UTILSTargets.cmake
-install(EXPORT DOLFINX-UTILSTargets DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/dolfinx-utils/cmake)
+install(EXPORT DOLFINX-UTILSTargets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/dolfinx-utils)
 
 # Generate CMake config files (DOLFINX-UTILSConfig{,Version}.cmake)
 include(CMakePackageConfigHelpers)
@@ -78,11 +78,11 @@ include(CMakePackageConfigHelpers)
 
 configure_package_config_file(${DOLFINX-UTILS_SOURCE_DIR}/cmake/templates/DOLFINX-UTILSConfig.cmake.in
 ${CMAKE_BINARY_DIR}/dolfinx-utils/DOLFINX-UTILSConfig.cmake
-INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/dolfinx-utils/cmake)
+INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/dolfinx-utils)
 
 # Install CMake helper files
 install(
   FILES
   ${CMAKE_BINARY_DIR}/dolfinx-utils/DOLFINX-UTILSConfig.cmake
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/dolfinx-utils/cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/dolfinx-utils
   COMPONENT Development)
