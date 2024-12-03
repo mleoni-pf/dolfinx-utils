@@ -24,12 +24,14 @@ PetscReal computeArea(const std::shared_ptr<const mesh::Mesh<double>> mesh,
             values);
 
     auto a = std::make_shared<fem::Constant<PetscScalar>>(1);
-    auto exteriorIntegrationDomains =
-            fem::compute_integration_domains(fem::IntegralType::exterior_facet,
-                                             *tags.topology(),
-                                             integrationTags.indices(),
-                                             integrationTags.dim(),
-                                             integrationTags.values());
+
+    std::vector<std::pair<int, std::vector<std::int32_t>>>
+            exteriorIntegrationDomains = {
+                    {0,
+                     fem::compute_integration_domains(
+                             fem::IntegralType::exterior_facet,
+                             *tags.topology(),
+                             tags.find(0))}};
     std::vector<std::pair<std::int32_t, std::span<const std::int32_t>>>
             exteriorIntegrationDomainsSpans;
     for (const auto& [i, v] : exteriorIntegrationDomains)
@@ -38,14 +40,14 @@ PetscReal computeArea(const std::shared_ptr<const mesh::Mesh<double>> mesh,
                 std::make_pair(i, std::span(v)));
     }
     auto M_area = std::make_shared<fem::Form<PetscScalar>>(
-            fem::create_form<PetscReal>(
-                    *form_area_area,
-                    {},
-                    {},
-                    {{"a", a}},
-                    {{fem::IntegralType::exterior_facet,
-                      exteriorIntegrationDomainsSpans}},
-                    mesh));
+            fem::create_form<PetscReal>(*form_area_area,
+                                        {},
+                                        {},
+                                        {{"a", a}},
+                                        {{fem::IntegralType::exterior_facet,
+                                          exteriorIntegrationDomainsSpans}},
+                                        {},
+                                        mesh));
 
     auto area_loc = fem::assemble_scalar(*M_area);
     decltype(area_loc) area = 0;

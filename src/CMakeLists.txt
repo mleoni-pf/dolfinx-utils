@@ -36,7 +36,7 @@ set(DOLFINX-UTILSSRC
            ${CMAKE_CURRENT_SOURCE_DIR}/computeHmin.h
            )
 
-add_library(dolfinx-utils STATIC ${DOLFINX-UTILSSRC} ${ufl2cpp_files})
+add_library(dolfinx-utils SHARED ${DOLFINX-UTILSSRC} ${ufl2cpp_files})
 
 # Target libraries
 target_link_libraries(dolfinx-utils dolfinx)
